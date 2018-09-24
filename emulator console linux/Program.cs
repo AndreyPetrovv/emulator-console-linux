@@ -16,9 +16,21 @@ namespace emulator_console_linux
             {
 
                 Console.Write(users());
-                Console.ReadLine();
+                string s = Console.ReadLine();
+                choiceCommand(s);
+                
             }
             Console.ReadKey();
+        }
+
+        static void choiceCommand(string com) {
+            string[] mas = com.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            switch (mas[0]) {
+                case "help": help(); break;
+
+            }
+
         }
 
         static private string users()
@@ -34,13 +46,28 @@ namespace emulator_console_linux
 
             string user = userName.Substring(++i);
 
-            return user+"-l:~$ ";
+            return user+" -l:~$ ";
         }
 
-        static private string help()
+        static private void help()
         {
+            List<string> command = new List<string> {
+                "ls — выдать список файлов в текущем каталоге",
+                "cd [каталог] — сменить текущий каталог",
+                "rm <файлы> — удалить файлы",
+                "mkdir <каталог> — создать новый каталог",
+                "pwd — вывести имя текущего каталога",
+                "clear — очистить экран консоли",
+                "none",
+                "none",
+                "none",
+                "none" };
 
-            return "";
+            foreach (var item in command)
+            {
+                Console.WriteLine(item);
+            }
+            
         }
     }
 }
