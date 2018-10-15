@@ -16,12 +16,12 @@ namespace emulator_console_linux
         {
             Console.Title = "eTerminal Linux";
 
-            way += users();
+            way += Users();
             
             while (true)
             {
 
-                Console.Write(users() + "@ubuntu -l:~$ ");
+                Console.Write(Users() + "@ubuntu -l:~$ ");
                 string s = Console.ReadLine();
                 choiceCommand(s);
                 
@@ -29,26 +29,28 @@ namespace emulator_console_linux
             Console.ReadKey();
         }
 
-        static void choiceCommand(string com) {
+        static void choiceCommand(string com)
+        {
             com = com.ToLower();
             string[] mas = com.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             switch (mas[0])
             {
-                case "help": help(); break;
-                case "reset": reset(); break;
-                case "pwd": pwd(); break;
+                case "help": Help(); break;
+                case "reset": Reset(); break;
+                case "pwd": Pwd(); break;
                 case "cd":
                     try
                     {
-                        cd(mas[1]);
+                        Cd(mas[1]);
                     }
                     catch
                     {
-                        cd("");
+                        Cd("");
                     }
                     break;
-                case "exit": exit(); break;
+                case "exit": Exit(); break;
+                case "ls": Ls(); break;
 
                 default:
                     Console.WriteLine("Команда не найдена");
@@ -57,7 +59,8 @@ namespace emulator_console_linux
 
         }
 
-        private static string users()
+        private static string Users()
+
         {
 
             string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
@@ -73,13 +76,34 @@ namespace emulator_console_linux
             return user;
         }
 
-        private static void cd(string cdCom) {
+        private static void Ls()
+        {
+            Console.WriteLine("Подкаталоги:");
+            string[] dirs = Directory.GetDirectories(way);
+            int i;
+            foreach (string s in dirs)
+            {
+                i = s.Length;
+                Console.WriteLine(s.Remove(0, way.Length+1));
+            }
+            Console.WriteLine();
+            Console.WriteLine("Файлы:");
+            string[] files = Directory.GetFiles(way);
+            foreach (string s in files)
+            {
+                i = s.Length;
+                Console.WriteLine(s.Remove(0, way.Length+1));
+            }
+        }
+
+        private static void Cd(string cdCom)
+        {
             switch (cdCom)
             {
                 case "":
                 case "~":
                     reway = way;
-                    way = "C:/Users/" + users();
+                    way = "C:/Users/" + Users();
                     break;
                 case "-":
                     if(reway != "")
@@ -127,7 +151,8 @@ namespace emulator_console_linux
 
         }
 
-        private static void help()
+        private static void Help()
+
         {
             List<string> command = new List<string> {
                 "ls — выдать список файлов в текущем каталоге",
@@ -137,7 +162,7 @@ namespace emulator_console_linux
                 "pwd — вывести имя текущего каталога",
                 "reset — очистить экран консоли",
                 "exit — выход из консоли ",
-                "none",
+                "help — выводит справочную инфорацию о командах linux",
                 "none",
                 "none" };
 
@@ -148,16 +173,19 @@ namespace emulator_console_linux
             
         }
 
-        private static void reset() {
+        private static void Reset()
+        {
             Console.Clear();
         }
 
-        private static void pwd() {
+        private static void Pwd()
+        {
 
             Console.WriteLine(way);
         }
 
-        private static void exit() {
+        private static void Exit()
+        {
             Environment.Exit(0);
         }
     }
