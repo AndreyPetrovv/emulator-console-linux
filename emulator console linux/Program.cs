@@ -10,7 +10,7 @@ namespace emulator_console_linux
     class Program
     {
         private static string reway = "";
-        private static string way = "C:/Users/";
+        private static string way = "C:\\Users\\";
 
         static void Main(string[] args)
         {
@@ -19,7 +19,7 @@ namespace emulator_console_linux
             while (true)
             {
 
-                Console.Write(users() + "ubuntu -l:~$ ");
+                Console.Write(users() + "@ubuntu -l:~$ ");
                 string s = Console.ReadLine();
                 choiceCommand(s);
                 
@@ -78,26 +78,26 @@ namespace emulator_console_linux
                 case "":
                 case "~":
                     reway = way;
-                    way = "C:/Users/" + users();
+                    way = "C:\\Users\\" + users();
                     break;
                 case "-":
                     if(reway != "")
                         way = reway;
                     break;
-                case "/":
+                case "\\":
                     reway = way;
-                    way = "C:/";
+                    way = "C:\\";
                     break;
-                case "/home":
+                case "\\home":
                     reway = way;
-                    way = "C:/Users/";
+                    way = "C:\\sers\\";
                     break;
 
                 default:
-                    if (Directory.Exists(way +"/"+ cdCom))
+                    if (Directory.Exists(way +"\\"+ cdCom))
                     {
                         reway = way;
-                        way +="/" + cdCom;
+                        way +="\\" + cdCom;
                     }
                     else
                         Console.WriteLine("Путь не найден");
