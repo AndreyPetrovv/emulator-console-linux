@@ -10,7 +10,7 @@ namespace emulator_console_linux
     class Program
     {
         private static string reway = "";
-        private static string way = "C:\\Users\\";
+        private static string way = "C:/Users/";
 
         static void Main(string[] args)
         {
@@ -49,6 +49,10 @@ namespace emulator_console_linux
                     }
                     break;
                 case "exit": exit(); break;
+
+                default:
+                    Console.WriteLine("Команда не найдена");
+                    break;
             }
 
         }
@@ -75,26 +79,46 @@ namespace emulator_console_linux
                 case "":
                 case "~":
                     reway = way;
-                    way = "C:\\Users\\" + users();
+                    way = "C:/Users/" + users();
                     break;
                 case "-":
                     if(reway != "")
                         way = reway;
                     break;
-                case "\\":
+                case "/":
                     reway = way;
-                    way = "C:\\";
+                    way = "C:/";
                     break;
-                case "\\home":
+                case "/home":
                     reway = way;
-                    way = "C:\\sers\\";
+                    way = "C:/Users/";
+                    break;
+                case "..":
+                    bool trye = true;
+                    int i ;
+                    while (trye)
+                    {
+                        i = way.Length - 1;
+                        if (way[i] != '/')
+                            way = way.Remove(i);
+                        else
+                        {
+                            way = way.Remove(i);
+                            trye = false;
+                        }
+                    }
                     break;
 
                 default:
-                    if (Directory.Exists(way +"\\"+ cdCom))
+                    if (Directory.Exists(way + "/" + cdCom))
                     {
                         reway = way;
-                        way +="\\" + cdCom;
+                        if (cdCom[cdCom.Length - 1] != '/')
+                            way += "/" + cdCom;
+                        else
+                        {
+                            way +="/" + cdCom.Substring(0, cdCom.Length - 1);
+                        }
                     }
                     else
                         Console.WriteLine("Путь не найден");
