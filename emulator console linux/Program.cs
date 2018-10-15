@@ -14,6 +14,8 @@ namespace emulator_console_linux
 
         static void Main(string[] args)
         {
+            Console.Title = "eTerminal Linux";
+
             way += users();
             
             while (true)
@@ -46,6 +48,7 @@ namespace emulator_console_linux
                         cd("");
                     }
                     break;
+                case "exit": exit(); break;
             }
 
         }
@@ -63,16 +66,10 @@ namespace emulator_console_linux
             }
 
             string user = userName.Substring(++i);
-
-
-
             return user;
         }
 
         private static void cd(string cdCom) {
-
-           
-
             switch (cdCom)
             {
                 case "":
@@ -115,7 +112,7 @@ namespace emulator_console_linux
                 "mkdir <каталог> — создать новый каталог",
                 "pwd — вывести имя текущего каталога",
                 "reset — очистить экран консоли",
-                "none",
+                "exit — выход из консоли ",
                 "none",
                 "none",
                 "none" };
@@ -134,6 +131,10 @@ namespace emulator_console_linux
         private static void pwd() {
 
             Console.WriteLine(way);
+        }
+
+        private static void exit() {
+            Environment.Exit(0);
         }
     }
 }
