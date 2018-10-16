@@ -23,13 +23,12 @@ namespace emulator_console_linux
 
                 Console.Write(Users() + "@ubuntu -l:~$ ");
                 string s = Console.ReadLine();
-                choiceCommand(s);
+                СhoiceCommand(s);
                 
             }
-            Console.ReadKey();
         }
 
-        static void choiceCommand(string com)
+        static void СhoiceCommand(string com)
         {
             com = com.ToLower();
             string[] mas = com.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -51,6 +50,16 @@ namespace emulator_console_linux
                     break;
                 case "exit": Exit(); break;
                 case "ls": Ls(); break;
+                case "mkdir":
+                    try
+                    {
+                        MkDir(mas[1]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Команда указанна не верно");
+                    }
+                    break;
 
                 default:
                     Console.WriteLine("Команда не найдена");
@@ -74,6 +83,23 @@ namespace emulator_console_linux
 
             string user = userName.Substring(++i);
             return user;
+        }
+
+        private static void MkDir(string subpath)
+        {
+            DirectoryInfo dirInfo;
+            try
+            {
+                dirInfo = new DirectoryInfo(way + "/" + subpath);
+            }
+            catch {
+                dirInfo = new DirectoryInfo(subpath);
+            }
+
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
         }
 
         private static void Ls()
@@ -141,8 +167,11 @@ namespace emulator_console_linux
                             way += "/" + cdCom;
                         else
                         {
-                            way +="/" + cdCom.Substring(0, cdCom.Length - 1);
+                            way += "/" + cdCom.Substring(0, cdCom.Length - 1);
                         }
+                    }
+                    else if (Directory.Exists(cdCom)) {
+                        way = cdCom;
                     }
                     else
                         Console.WriteLine("Путь не найден");
