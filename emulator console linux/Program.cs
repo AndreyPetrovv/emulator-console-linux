@@ -32,50 +32,73 @@ namespace emulator_console_linux
         {
             com = com.ToLower();
             string[] mas = com.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if(mas.Length!=0)
-            switch (mas[0])
+            if (mas.Length != 0)
+                switch (mas[0])
+                {
+                    case "help": Help(); break;
+                    case "reset": Reset(); break;
+                    case "pwd": Pwd(); break;
+                    case "cd":
+                        try
+                        {
+                            Cd(mas[1]);
+                        }
+                        catch
+                        {
+                            Cd("");
+                        }
+                        break;
+                    case "exit": Exit(); break;
+                    case "ls": Ls(); break;
+                    case "mkdir":
+                        try
+                        {
+                            MkDir(mas[1]);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Команда указанна не верно");
+                        }
+                        break;
+                    case "rm":
+                        try
+                        {
+                            Rm(mas[1]);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Файл не найден");
+                        }
+                        break;
+                    case "rmdir":
+                        try
+                        {
+                            RmDir(mas[1]);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Каталог не найден");
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("Команда не найдена");
+                        break;
+                }
+
+        }
+
+        static void RmDir(string nameKatalog)
+        {
+            try
             {
-                case "help": Help(); break;
-                case "reset": Reset(); break;
-                case "pwd": Pwd(); break;
-                case "cd":
-                    try
-                    {
-                        Cd(mas[1]);
-                    }
-                    catch
-                    {
-                        Cd("");
-                    }
-                    break;
-                case "exit": Exit(); break;
-                case "ls": Ls(); break;
-                case "mkdir":
-                    try
-                    {
-                        MkDir(mas[1]);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Команда указанна не верно");
-                    }
-                    break;
-                case "rm":
-                    try
-                    {
-                        Rm(mas[1]);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Файл не найден");
-                    }
-                    break;
-
-                default:
-                    Console.WriteLine("Команда не найдена");
-                    break;
+                DirectoryInfo dirInfo = new DirectoryInfo(way + "\\" + nameKatalog);
+                dirInfo.Delete(true);
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         static void Rm(string nameFile) {
@@ -125,19 +148,23 @@ namespace emulator_console_linux
         {
             Console.WriteLine("Подкаталоги:");
             string[] dirs = Directory.GetDirectories(way);
-            int i;
+            int i = way.Length ;
             foreach (string s in dirs)
             {
-                i = s.Length;
-                Console.WriteLine(s.Remove(0, way.Length));
+                i = way.Length;
+                if (s[way.Length] == '\\')
+                    i += 1;
+                Console.WriteLine(s.Remove(0,i));
             }
             Console.WriteLine();
             Console.WriteLine("Файлы:");
             string[] files = Directory.GetFiles(way);
             foreach (string s in files)
             {
-                i = s.Length;
-                Console.WriteLine(s.Remove(0, way.Length));
+                i = way.Length;
+                if (s[way.Length] == '\\')
+                    i += 1;
+                Console.WriteLine(s.Remove(0, i));
             }
         }
 
@@ -206,12 +233,12 @@ namespace emulator_console_linux
                 "ls — выдать список файлов в текущем каталоге",
                 "cd [каталог] — сменить текущий каталог",
                 "rm <файл> — удалить файл",
+                "rmdir <каталог> — удалить каталог",
                 "mkdir <каталог> — создать новый каталог",
                 "pwd — вывести имя текущего каталога",
                 "reset — очистить экран консоли",
                 "exit — выход из консоли ",
                 "help — выводит справочную инфорацию о командах эмулятора linux",
-                "none",
                 "none" };
 
             foreach (var item in command)
