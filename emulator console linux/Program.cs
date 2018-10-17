@@ -32,7 +32,7 @@ namespace emulator_console_linux
         {
             com = com.ToLower();
             string[] mas = com.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
+            if(mas.Length!=0)
             switch (mas[0])
             {
                 case "help": Help(); break;
@@ -60,6 +60,16 @@ namespace emulator_console_linux
                         Console.WriteLine("Команда указанна не верно");
                     }
                     break;
+                case "rm":
+                    try
+                    {
+                        Rm(mas[1]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Файл не найден");
+                    }
+                    break;
 
                 default:
                     Console.WriteLine("Команда не найдена");
@@ -68,6 +78,15 @@ namespace emulator_console_linux
 
         }
 
+        static void Rm(string nameFile) {
+            FileInfo fileInf = new FileInfo(way+"\\" + nameFile);
+            if (fileInf.Exists)
+            {
+                fileInf.Delete();
+                // альтернатива с помощью класса File
+                // File.Delete(path);
+            }
+        }
         private static string Users()
 
         {
@@ -110,7 +129,7 @@ namespace emulator_console_linux
             foreach (string s in dirs)
             {
                 i = s.Length;
-                Console.WriteLine(s.Remove(0, way.Length+1));
+                Console.WriteLine(s.Remove(0, way.Length));
             }
             Console.WriteLine();
             Console.WriteLine("Файлы:");
@@ -118,7 +137,7 @@ namespace emulator_console_linux
             foreach (string s in files)
             {
                 i = s.Length;
-                Console.WriteLine(s.Remove(0, way.Length+1));
+                Console.WriteLine(s.Remove(0, way.Length));
             }
         }
 
@@ -186,12 +205,12 @@ namespace emulator_console_linux
             List<string> command = new List<string> {
                 "ls — выдать список файлов в текущем каталоге",
                 "cd [каталог] — сменить текущий каталог",
-                "rm <файлы> — удалить файлы",
+                "rm <файл> — удалить файл",
                 "mkdir <каталог> — создать новый каталог",
                 "pwd — вывести имя текущего каталога",
                 "reset — очистить экран консоли",
                 "exit — выход из консоли ",
-                "help — выводит справочную инфорацию о командах linux",
+                "help — выводит справочную инфорацию о командах эмулятора linux",
                 "none",
                 "none" };
 
