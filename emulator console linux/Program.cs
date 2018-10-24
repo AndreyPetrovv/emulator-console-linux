@@ -20,7 +20,6 @@ namespace emulator_console_linux
             
             while (true)
             {
-
                 Console.Write(Users() + "@ubuntu -l:~$ ");
                 string s = Console.ReadLine();
                 СhoiceCommand(s);
@@ -80,11 +79,28 @@ namespace emulator_console_linux
                             Console.WriteLine("Каталог не найден");
                         }
                         break;
+                    case "mv":
+                        try
+                        {
+                            Mv(mas[1], mas[2]);
+                        }
+                        catch {
+                            Console.WriteLine("Путь не найден, либо копируемый файл не существует");
+                        }
+                        break;
+                    case "sh":
 
+                        break;
                     default:
                         Console.WriteLine("Команда не найдена");
                         break;
                 }
+
+        }
+
+        static void Mv(string nameFile, string wayCopyFile)
+        {
+
 
         }
 
@@ -239,7 +255,7 @@ namespace emulator_console_linux
                 "reset — очистить экран консоли",
                 "exit — выход из консоли ",
                 "help — выводит справочную инфорацию о командах эмулятора linux",
-                "none" };
+                "sh <файл> — запускает командный файл" };
 
             foreach (var item in command)
             {
