@@ -100,7 +100,20 @@ namespace emulator_console_linux
 
         static void Mv(string nameFile, string wayCopyFile)
         {
-
+            try
+            {
+                if (Directory.Exists(way + "/" + wayCopyFile))
+                    File.Copy(way+ "/" + nameFile, way + "/" + wayCopyFile, true);
+                else if (Directory.Exists(wayCopyFile))
+                    File.Copy(way + nameFile, wayCopyFile, true);
+                else {
+                    Console.WriteLine("что то не верно");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Копирование не прошло");
+            }
 
         }
 
@@ -255,7 +268,8 @@ namespace emulator_console_linux
                 "reset — очистить экран консоли",
                 "exit — выход из консоли ",
                 "help — выводит справочную инфорацию о командах эмулятора linux",
-                "sh <файл> — запускает командный файл" };
+                "sh <файл> — запускает командный файл",
+                "mv <файл> <путь до места копирования> — копирует определённый файл"};
 
             foreach (var item in command)
             {
