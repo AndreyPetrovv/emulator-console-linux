@@ -103,14 +103,14 @@ namespace emulator_console_linux
             try
             {
                 if (Directory.Exists(way + "/" + wayCopyFile))
-                    File.Copy(way+ "/" + nameFile, way + "/" + wayCopyFile, true);
+                    File.Copy(way+ "/" + nameFile, way + "/" + wayCopyFile + "/" + nameFile, true);
                 else if (Directory.Exists(wayCopyFile))
-                    File.Copy(way + nameFile, wayCopyFile, true);
+                    File.Copy(way + "/" + nameFile, wayCopyFile + "/" + nameFile, true);
                 else {
                     Console.WriteLine("что то не верно");
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 Console.WriteLine("Копирование не прошло");
             }
