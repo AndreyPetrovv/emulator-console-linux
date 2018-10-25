@@ -22,12 +22,11 @@ namespace emulator_console_linux
             {
                 Console.Write(Users() + "@ubuntu -l:~$ ");
                 string s = Console.ReadLine();
-                СhoiceCommand(s);
-                
+                ChoiceCommand(s);
             }
         }
 
-        static void СhoiceCommand(string com)
+        private static void ChoiceCommand(string com)
         {
             com = com.ToLower();
             string[] mas = com.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -37,6 +36,8 @@ namespace emulator_console_linux
                     case "help": Help(); break;
                     case "reset": Reset(); break;
                     case "pwd": Pwd(); break;
+                    case "ls": Ls(); break;
+                    case "exit": Exit(); break;
                     case "cd":
                         try
                         {
@@ -47,8 +48,6 @@ namespace emulator_console_linux
                             Cd("");
                         }
                         break;
-                    case "exit": Exit(); break;
-                    case "ls": Ls(); break;
                     case "mkdir":
                         try
                         {
@@ -89,7 +88,24 @@ namespace emulator_console_linux
                         }
                         break;
                     case "sh":
-
+                        try
+                        {
+                            Sh(mas[1]);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Путь не найден, либо исполнительный файл не существует");
+                        }
+                        break;
+                    case "echo":
+                        try
+                        {
+                            Echo(mas[1]);
+                        }
+                        catch
+                        {
+                            Echo("");
+                        }
                         break;
                     default:
                         Console.WriteLine("Команда не найдена");
@@ -98,7 +114,25 @@ namespace emulator_console_linux
 
         }
 
-        static void Mv(string nameFile, string wayCopyFile)
+        private static void Echo(string eho)
+        {
+            Console.WriteLine(eho);
+        }
+
+        private static void Sh(string usedFile)
+        {
+            using (StreamReader sr = new StreamReader(way + "/" + usedFile, System.Text.Encoding.Default))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    ChoiceCommand(line);
+                }
+            }
+            
+        }
+
+        private static void Mv(string nameFile, string wayCopyFile)
         {
             try
             {
@@ -117,7 +151,7 @@ namespace emulator_console_linux
 
         }
 
-        static void RmDir(string nameKatalog)
+        private static void RmDir(string nameKatalog)
         {
             try
             {
@@ -130,17 +164,18 @@ namespace emulator_console_linux
             }
         }
 
-        static void Rm(string nameFile) {
+        private static void Rm(string nameFile)
+        {
             FileInfo fileInf = new FileInfo(way+"\\" + nameFile);
             if (fileInf.Exists)
             {
                 fileInf.Delete();
-                // альтернатива с помощью класса File
-                // File.Delete(path);
+                
+
             }
         }
-        private static string Users()
 
+        private static string Users()
         {
 
             string userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
@@ -256,7 +291,6 @@ namespace emulator_console_linux
         }
 
         private static void Help()
-
         {
             List<string> command = new List<string> {
                 "ls — выдать список файлов в текущем каталоге",
