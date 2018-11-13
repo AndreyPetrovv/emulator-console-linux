@@ -97,7 +97,7 @@ namespace emulator_console_linux
                     case "echo":
                         try
                         {
-                            Echo(mas[1]);
+                            Echo(mas);
                         }
                         catch
                         {
@@ -110,7 +110,15 @@ namespace emulator_console_linux
                 }
 
         }
+        private static void Echo(string [] eho)
+        {
+            for (int i = 1; i < eho.Length; i++)
+            {
 
+                Console.Write(eho[i] + " ");
+            }
+            Console.WriteLine();
+        }
         private static void Echo(string eho)
         {
             Console.WriteLine(eho);
